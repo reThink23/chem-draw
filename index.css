@@ -12,6 +12,8 @@ html, body {
 	padding: 0;
 }
 
-* {
-	/* border-color: red; */
+textarea {
+	resize: none;
+	text-align: center;
+	max-width: 4em;
 }

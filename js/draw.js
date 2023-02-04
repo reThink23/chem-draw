@@ -1,4 +1,7 @@
-const nodes = [ // the nodeDataArray
+const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Mg", "Mn"];
+const customAtoms = [];
+
+const nodesData = [
   { key: 1, atom: "C", loc: "0 0" },
 	{ key: 2, atom: "C", loc: "100 0" },
 	{ key: 3, atom: "C", loc: "200 0" },
@@ -12,7 +15,7 @@ const nodes = [ // the nodeDataArray
 	{ key: 11, atom: "H", loc: "200 -100"  },
 ];
 
-const links = [ // the linkDataArray
+const linksData = [
 	{ from: 1, to: 2 },
 	{ from: 2, to: 3 },
 	{ from: 1, to: 4 },
@@ -26,15 +29,48 @@ const links = [ // the linkDataArray
 ];
 const triArrow = go.Geometry.parse("M 0,0 L 10,50 20,10 30,50 40,0", false);
 
+const validateAtom = (tb, olds, news) => {
+  return [...atoms, ...customAtoms].includes(news);
+}
+
+const errorHandler = (tool, olds, news) => {
+  var mgr = tool.diagram.toolManager;
+  mgr.hideToolTip();
+  var node = tool.textBlock.part;
+  var tt = new go.ToolTip({
+    "Border.fill": "pink",
+    "Border.stroke": "red",
+    "Border.strokeWidth": 2
+  })
+  .add(new go.textBlock(
+    "Unable to replace the string '" + olds + "' with '" + news + "' on node '" + node.key +
+    "'\nbecause the new string does not contain the capital letter 'W'."
+  ));
+  mgr.showToolTip(tt, node);
+}
+
+const editHandler = (tb, olds, news) => {
+  var mgr = tb.diagram.toolManager;
+  mgr.hideToolTip();
+}
+
 
 const myDiagram = new go.Diagram("draw", { "undoManager.isEnabled": true, initialAutoScale: go.Diagram.Uniform });
 
 // myDiagram.layout = new go.ForceDirectedLayout({ angle: 90, nodeSpacing: 10, layerSpacing: 30 });
 
-myDiagram.nodeTemplate = new go.Node("Auto")
+myDiagram.nodeTemplate = new go.Node("Auto", {toolTip: new go.ToolTip})
   .bind("location", "loc", go.Point.parse)
   .add(new go.Shape("Circle", { fill: "lightgray" }))
-  .add(new go.TextBlock({ margin: 10, font: "18px Sans-Serif" }).bind("text", "atom"))
+  .add(new go.TextBlock({ 
+    margin: 10, 
+    font: "18px Sans-Serif", 
+    editable: true, 
+    isMultiline: false, 
+    textValidation: validateAtom,
+    errorFunction: errorHandler,
+    textEdited: editHandler
+  }).bind("text", "atom"))
 
 myDiagram.linkTemplate =
   new go.Link(
@@ -48,7 +84,7 @@ myDiagram.linkTemplate =
     //.add(new go.Shape({  toArrow: "Standard", stroke: null  }))
 
 
-myDiagram.model = new go.GraphLinksModel(nodes, links);
+myDiagram.model = new go.GraphLinksModel(nodesData, linksData);
 
 function addNode(e, obj) {
   var data = { text: "Node", color: "white" };

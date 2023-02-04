@@ -1,0 +1,14 @@
+{
+	"C": { "name": "Oxygen", "mass": 16.999, "electrons": 8, "protons": 8, "neutrons": 8, "ordinal": 8, "valence": 6, "oxidation": [ -2 ] , "configuration": "1s 2s^2 2p^2" },
+	"H": {},
+	"O": {},
+	"N": {},
+	"S": {},
+	"P": {},
+	"Cl": {},
+	"Br": {},
+	"I": {},
+	"Mg": {},
+	"Si": {},
+	"Mn": {}
+}
