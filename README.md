@@ -9,16 +9,20 @@ It focuses on:
 - fast in creating structures
 
 ## Short term TODO
+- [x] arrow key functionality
+- [ ] add/correct focusing
+- [ ] change Atom type
+- [ ] change appearance of node based on atom type
 - [ ] basic editing
-- [ ] arrow key functionality
 - [ ] validation of input
 - [ ] how to generate (meaningful) unique ids/keys
-- [ ] shortcuts
+- [ ] custom shortcuts
 
 ## Long Term TODO
 - [ ] Basic Application running, Arrow keys in use, add, create, modify simple chemical structures
 - [ ] Other models of same structure (Stereochemistry - direction of bonds in 3D, Fischer projection, Haworth projection, Chair conformation)
 - [ ] Creation of packages to reuse already created chemical structures for faster recombination (e.g. amino acids, DNA bases)
+- [ ] Import/Export including common file types for molecules (.svg, .png, .mol, .smile, 3D-Model)
 - [ ] detect & highlight functional groups or special bonds (ester, peptide)
 - [ ] enable to control the lengths of bonds and right distances between molecules (with explicit mode to set them manually)
 - [ ] different modes of viewing structure with complexity, from simple 2D structure to 3D

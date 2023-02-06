@@ -1,4 +1,6 @@
-const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Mg", "Mn"];
+const $ = go.GraphObject.make;
+
+const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Si", "Mg", "Mn"];
 const customAtoms = [];
 
 const nodesData = [
@@ -12,7 +14,7 @@ const nodesData = [
 	{ key: 8, atom: "H", loc: "100 -100" },
 	{ key: 9, atom: "H", loc: "200 100" },
 	{ key: 10, atom: "H", loc: "300 0" },
-	{ key: 11, atom: "H", loc: "200 -100"  },
+	{ key: 11, atom: "H", loc: "200 -100" },
 ];
 
 const linksData = [
@@ -27,26 +29,31 @@ const linksData = [
 	{ from: 3, to: 10 },
 	{ from: 3, to: 11 },
 ];
-const triArrow = go.Geometry.parse("M 0,0 L 10,50 20,10 30,50 40,0", false);
 
 const validateAtom = (tb, olds, news) => {
   return [...atoms, ...customAtoms].includes(news);
 }
 
+const validateBonds = (fromnode, fromport, tonode, toport) => {
+      // total number of links connecting with all ports of a node is limited to 1:
+      const maxCount = atomProps[fromnode.data.atom].maxBonds;
+      return fromnode.linksConnected.count + tonode.linksConnected.count <= maxCount;
+    }
+
 const errorHandler = (tool, olds, news) => {
   var mgr = tool.diagram.toolManager;
   mgr.hideToolTip();
   var node = tool.textBlock.part;
-  var tt = new go.ToolTip({
-    "Border.fill": "pink",
-    "Border.stroke": "red",
-    "Border.strokeWidth": 2
-  })
-  .add(new go.textBlock(
-    "Unable to replace the string '" + olds + "' with '" + news + "' on node '" + node.key +
-    "'\nbecause the new string does not contain the capital letter 'W'."
-  ));
-  mgr.showToolTip(tt, node);
+  var tt = $(
+    "ToolTip", {
+      "Border.fill": "pink",
+      "Border.stroke": "red",
+      "Border.strokeWidth": 2
+    },
+    $(go.TextBlock, 
+      news + " is not an known Atom"
+    )
+  )
 }
 
 const editHandler = (tb, olds, news) => {
@@ -54,42 +61,52 @@ const editHandler = (tb, olds, news) => {
   mgr.hideToolTip();
 }
 
+const selectionChangeHandler = part => {
+  myDiagram.commandHandler.editTextBlock(part);
+}
 
-const myDiagram = new go.Diagram("draw", { "undoManager.isEnabled": true, initialAutoScale: go.Diagram.Uniform });
+
+const myDiagram = $(go.Diagram, "draw", { "undoManager.isEnabled": true, textEditingTool: new ContinuedTextEditingTool(), initialAutoScale: go.Diagram.Uniform });
 
 // myDiagram.layout = new go.ForceDirectedLayout({ angle: 90, nodeSpacing: 10, layerSpacing: 30 });
 
-myDiagram.nodeTemplate = new go.Node("Auto", {toolTip: new go.ToolTip})
-  .bind("location", "loc", go.Point.parse)
-  .add(new go.Shape("Circle", { fill: "lightgray" }))
-  .add(new go.TextBlock({ 
+myDiagram.nodeTemplate = $(
+  go.Node, "Auto", {/* ,linkValidation: validateBonds */}, new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+  $(go.Shape, "Circle", { fill: "lightgray" }),
+  $(go.TextBlock, { 
     margin: 10, 
     font: "18px Sans-Serif", 
     editable: true, 
     isMultiline: false, 
     textValidation: validateAtom,
     errorFunction: errorHandler,
-    textEdited: editHandler
-  }).bind("text", "atom"))
+    textEdited: editHandler,
+    // selectionChanged: selectionChangeHandler
+  }, new go.Binding("text", "atom").makeTwoWay())
+);
+
+
+const triArrow = go.Geometry.parse("M 0,0 L 10,50 20,10 30,50 40,0", false);
 
 myDiagram.linkTemplate =
-  new go.Link(
+  $(go.Link,
     // default routing is go.Link.Normal
     // default corner is 0
-    {})
+    {},
     // the link path, a Shape
-    // .add(new go.Shape({ strokeWidth: 3, stroke: "#555" }))
-    .add(new go.Shape({ geometry: triArrow, strokeWidth: 3, stroke: "#555" }))
+    // $(go.Shape, { strokeWidth: 3, stroke: "#555" }))
+    $(go.Shape, { geometry: triArrow, strokeWidth: 3, stroke: "#555" }))
     // if we wanted an arrowhead we would also add another Shape with toArrow defined:
     //.add(new go.Shape({  toArrow: "Standard", stroke: null  }))
 
 
 myDiagram.model = new go.GraphLinksModel(nodesData, linksData);
+myDiagram.select(myDiagram.findNodeForData({atom: "C", loc: "0 0"}));
 
-function addNode(e, obj) {
-  var data = { text: "Node", color: "white" };
-  // do not need to set "key" property -- addNodeData will assign it automatically
-  e.diagram.model.addNodeData(data);
-  var node = e.diagram.findPartForData(data);
-  node.location = e.diagram.lastInput.documentPoint;
-}
+// function addNode(e, obj) {
+//   var data = { text: "Node", color: "white" };
+//   // do not need to set "key" property -- addNodeData will assign it automatically
+//   e.diagram.model.addNodeData(data);
+//   var node = e.diagram.findPartForData(data);
+//   node.location = e.diagram.lastInput.documentPoint;
+// }
