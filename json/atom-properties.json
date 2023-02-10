@@ -1,7 +1,7 @@
 {
-	"C": { "name": "Oxygen", "mass": 16.999, "electrons": 8, "protons": 8, "neutrons": 8, "ordinal": 8, "valence": 6, "oxidation": [ -2 ] , "configuration": "1s 2s^2 2p^2" },
-	"H": {},
-	"O": {},
+	"O": { "name": "Oxygen", "mass": 15.999, "electrons": 8, "protons": 8, "neutrons": 8, "ordinal": 8, "valence": 6, "oxidation": [ -2 ] , "configuration": "1s^1 2s^2 2p^2" },
+	"H": { "name": "Hydrogen", "mass": 1.00784, "electrons": 1, "protons": 1, "neutrons": 0, "ordinal": 1, "valence": 1, "oxidation": [ 1 ], "configuration": "1s^1" },
+	"C": { "name": "Carbon", "mass": 12.011, "electrons": 6, "neutrons": 6, "protons": 6, "ordinal": 6, "valence": 4, "oxidation": [ -4, -3, -2, -1, 0, 1, 2, 3, 4 ], "configuration": "1s^1 2s^2 2p^2" },
 	"N": {},
 	"S": {},
 	"P": {},

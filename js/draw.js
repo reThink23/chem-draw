@@ -4,17 +4,17 @@ const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Si", "Mg", "Mn"];
 const customAtoms = [];
 
 const nodesData = [
-  { key: 1, atom: "C", loc: "0 0" },
-	{ key: 2, atom: "C", loc: "100 0" },
-	{ key: 3, atom: "C", loc: "200 0" },
-  { key: 4, atom: "H", loc: "-100 0" },
-  { key: 5, atom: "H", loc: "0 100" },
-	{ key: 6, atom: "H", loc: "0 -100" },
-	{ key: 7, atom: "H", loc: "100 100" },
-	{ key: 8, atom: "H", loc: "100 -100" },
-	{ key: 9, atom: "H", loc: "200 100" },
-	{ key: 10, atom: "H", loc: "300 0" },
-	{ key: 11, atom: "H", loc: "200 -100" },
+  { key: 1, atom: "C", max: 4, loc: "0 0" },
+	{ key: 2, atom: "C", max: 4, loc: "100 0" },
+	{ key: 3, atom: "C", max: 4, loc: "200 0" },
+  { key: 4, atom: "H", max: 4, loc: "-100 0" },
+  { key: 5, atom: "H", max: 1, loc: "0 100" },
+	{ key: 6, atom: "H", max: 1, loc: "0 -100" },
+	{ key: 7, atom: "H", max: 1, loc: "100 100" },
+	{ key: 8, atom: "H", max: 1, loc: "100 -100" },
+	{ key: 9, atom: "H", max: 1, loc: "200 100" },
+	{ key: 10, atom: "H", max: 1, loc: "300 0" },
+	{ key: 11, atom: "H", max: 1, loc: "200 -100" },
 ];
 
 const linksData = [
@@ -71,8 +71,8 @@ const myDiagram = $(go.Diagram, "draw", { "undoManager.isEnabled": true, textEdi
 // myDiagram.layout = new go.ForceDirectedLayout({ angle: 90, nodeSpacing: 10, layerSpacing: 30 });
 
 myDiagram.nodeTemplate = $(
-  go.Node, "Auto", {/* ,linkValidation: validateBonds */}, new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-  $(go.Shape, "Circle", { fill: "lightgray" }),
+  go.Node, "Auto", {linkValidation: validateBonds}, new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+  $(go.Shape, "Circle", { fill: "white" }),
   $(go.TextBlock, { 
     margin: 10, 
     font: "18px Sans-Serif", 
@@ -95,13 +95,19 @@ myDiagram.linkTemplate =
     {},
     // the link path, a Shape
     // $(go.Shape, { strokeWidth: 3, stroke: "#555" }))
-    $(go.Shape, { geometry: triArrow, strokeWidth: 3, stroke: "#555" }))
+    $(go.Shape, { geometry: triArrow, strokeWidth: 3, stroke: "#000" }))
     // if we wanted an arrowhead we would also add another Shape with toArrow defined:
     //.add(new go.Shape({  toArrow: "Standard", stroke: null  }))
 
 
 myDiagram.model = new go.GraphLinksModel(nodesData, linksData);
-myDiagram.select(myDiagram.findNodeForData({atom: "C", loc: "0 0"}));
+
+myDiagram.model.addChangedListener((e) => {
+  if (e.propertyName == "atom") {
+    myDiagram.model.setDataProperty(e.object, "max", getValenceElectrons(elems, e.object.atom));
+    myDiagram.select(myDiagram.findNodeForData(e.object));
+  }
+})
 
 // function addNode(e, obj) {
 //   var data = { text: "Node", color: "white" };

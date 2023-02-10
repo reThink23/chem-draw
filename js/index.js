@@ -1,5 +1,10 @@
 const lastNextNodes = [];
 
+const arr = myDiagram.model.nodeDataArray;
+const data = arr[Math.floor(Math.random() * arr.length)];
+const node = myDiagram.findNodeForData(data);
+myDiagram.select(node);
+
 const addNode = (crtNode, nodeData) => {
 	myDiagram.startTransaction("add node with link");
 	myDiagram.model.addNodeData(nodeData);
@@ -56,7 +61,8 @@ const navigateNode = (key) => {
 			// determine closest node & switch between nodes
 			// to switch keep selection (nNodes) and jump between with arrow keys
 			myDiagram.select(closestNode);
-			myDiagram.toolManager.textEditingTool.doCancel();
+			myDiagram.toolManager.textEditingTool.acceptText();
+			// myDiagram.toolManager.textEditingTool.doCancel();
 			myDiagram.commandHandler.editTextBlock(closestNode.elt(1));
 		} else {
 			const dist = 100;
@@ -86,7 +92,9 @@ const navigateNode = (key) => {
 			const newNode = addNode(crtNode, newNodeData);
 			myDiagram.select(newNode);
 			const tb = newNode.elt(1);
-			if (myDiagram.commandHandler.canEditTextBlock(tb)) myDiagram.commandHandler.editTextBlock(tb);
+			if (myDiagram.commandHandler.canEditTextBlock(tb)) {
+				myDiagram.commandHandler.editTextBlock(tb);
+			}
 		}
 	}
 }
@@ -102,6 +110,7 @@ myDiagram.commandHandler.doKeyDown = function() { // must be a function, not an 
 };
 
 document.onkeyup = (e) => {
+  if (document.activeElement === document.querySelector("textarea:focus")) return;
   e = e || window.event;
   if (e.key.startsWith("Arrow")) navigateNode(e.key);
   if (e.key == "Del" && e.shift) navigateNode(e.key);
