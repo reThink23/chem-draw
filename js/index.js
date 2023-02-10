@@ -46,6 +46,21 @@ const getNextNodes = (key, crtNode) => {
 	return {nextNodes, closestNode};
 }
 
+const shiftPoint = (node, pos, shift) => {
+	if (pos === "x") return new go.Point(node.location.x + shift, node.location.y);
+	if (pos === "y") return new go.Point(node.location.x, node.location.y + shift);
+	return null;
+}
+
+
+const dist = 100;
+const keyMap = {
+	ArrowUp: (node) => shiftPoint(node, "y", -dist),
+	ArrowDown: (node) => shiftPoint(node, "y", dist),
+	ArrowLeft: (node) => shiftPoint(node, "x", -dist),
+	ArrowRight: (node) => shiftPoint(node, "x", dist),
+}
+
 const navigateNode = (key) => {
 	
 	// check for validity of atom, prompt again or remove node on esc
@@ -65,7 +80,6 @@ const navigateNode = (key) => {
 			// myDiagram.toolManager.textEditingTool.doCancel();
 			myDiagram.commandHandler.editTextBlock(closestNode.elt(1));
 		} else {
-			const dist = 100;
 			var p;
 			switch (key) {
 				case "ArrowUp":
@@ -88,6 +102,8 @@ const navigateNode = (key) => {
 			// const p = new go.Point(crtNode.location.x, crtNode.location.y + dist);
 			const loc = go.Point.stringify(p);
 			// create and link to existing node
+			if (crtNode.linksConnected.count >= getBindableElectrons(crtNode.data.atom)) return;
+			console.log(crtNode.linksConnected.count)
 			const newNodeData = {atom: "C", loc};
 			const newNode = addNode(crtNode, newNodeData);
 			myDiagram.select(newNode);
