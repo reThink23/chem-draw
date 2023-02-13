@@ -1,6 +1,6 @@
 const $ = go.GraphObject.make;
 
-const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Si", "Mg", "Mn"];
+const atoms = ["C", "H", "O", "P", "N", "S", "Cl", "Br", "I", "Si", "Mg", "Mn"]; // elems.keys();
 const customAtoms = [];
 
 const nodesData = [
@@ -27,6 +27,8 @@ const linksData = [
 	{ from: 8, to: 2 },
 	{ from: 3, to: 9 },
 	{ from: 3, to: 10 },
+	{ from: 3, to: 11 },
+	{ from: 3, to: 11 },
 	{ from: 3, to: 11 },
 ];
 
@@ -62,6 +64,7 @@ const editHandler = (tb, olds, news) => {
 }
 
 const selectionChangeHandler = part => {
+  if (part.type == go.Node) lastNode = part;
   myDiagram.commandHandler.editTextBlock(part);
 }
 
@@ -86,7 +89,7 @@ myDiagram.nodeTemplate = $(
 );
 
 
-const triArrow = go.Geometry.parse("M 0,0 L 10,50 20,10 30,50 40,0", false);
+const triArrow = go.Geometry.parse("M 0,0 10,44 20,0 Z", true);
 
 myDiagram.linkTemplate =
   $(go.Link,
@@ -94,8 +97,19 @@ myDiagram.linkTemplate =
     // default corner is 0
     {},
     // the link path, a Shape
-    // $(go.Shape, { strokeWidth: 3, stroke: "#555" }))
-    $(go.Shape, { geometry: triArrow, strokeWidth: 3, stroke: "#000" }))
+    $(go.Shape, { strokeWidth: 3, stroke: "#555" }),
+    
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,0 3,0 3,44 0,44 Z M 8,0 11,0 11,44 8,44 Z", true), strokeWidth: 0, fill: "#555"}),
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,0 44,0 44,3 0,3 Z M 0,8 44,8 44,11 0,11 Z", true), strokeWidth: 0, fill: "#555"}),
+    
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,0 3,0 3,44 0,44 Z M 8,0 11,0 11,44 8,44 Z M 16,0 19,0 19,44 16,44 Z", true), strokeWidth: 0, fill: "#555"}),
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,0 44,0 44,3 0,3 Z M 0,8 44,8 44,11 0,11 Z M 0,16 44,16 44,19 0,19", true), strokeWidth: 0, fill: "#555"}),
+    
+    // $(go.Shape, { geometry: triArrow, strokeWidth: 0, stroke: "#000" }),
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,0 44,10 0,20 Z", true), /* fill: "transparent", */ strokeWidth: 0}),
+    // $(go.Shape, { geometry: go.Geometry.parse("M 0,44 10,0 20,44 Z", true), strokeWidth: 0}),
+    // $(go.Shape, { geometry: go.Geometry.parse("M 44,0 0,10 44,20 Z", true), strokeWidth: 0}),
+  )
     // if we wanted an arrowhead we would also add another Shape with toArrow defined:
     //.add(new go.Shape({  toArrow: "Standard", stroke: null  }))
 
@@ -103,6 +117,7 @@ myDiagram.linkTemplate =
 myDiagram.model = new go.GraphLinksModel(nodesData, linksData);
 
 myDiagram.model.addChangedListener((e) => {
+  // if (e.change === ChangedEvent.Remove) {}
   if (e.propertyName == "atom") {
     myDiagram.model.setDataProperty(e.object, "max", getValenceElectrons(elems, e.object.atom));
     myDiagram.select(myDiagram.findNodeForData(e.object));
