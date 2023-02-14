@@ -5,10 +5,10 @@ const arr = myDiagram.model.nodeDataArray;
 const key = arr.at(-1).key;
 const firstNode = myDiagram.findNodeForKey(key);
 myDiagram.select(firstNode);
-const tbFN = firstNode.elt(1);
-if (myDiagram.commandHandler.canEditTextBlock(tbFN)) {
-	myDiagram.commandHandler.editTextBlock(tbFN);
-}
+// const tbFN = firstNode.elt(1);
+// if (myDiagram.commandHandler.canEditTextBlock(tbFN)) {
+// 	myDiagram.commandHandler.editTextBlock(tbFN);
+// }
 
 const addNode = (crtNode, nodeData) => {
 	myDiagram.startTransaction("add node with link");
@@ -25,7 +25,12 @@ const getNextNodes = (crtNode, pos, direction=1) => {
 	var closestNode = null;
 
 	if (["x", "y"].includes(pos)) {
-		crtNode.findNodesConnected().each(node => { if (dir * crtNode.location[pos] < dir * node.location[pos]) nextNodes.push(node); });
+		crtNode.findNodesConnected().each(node => { 
+			if (dir * crtNode.location[pos] < dir * node.location[pos]) {
+				nextNodes.push(node);
+				// if (dir * closest.location[pos] > dir * node.location[pos]) latestNode = node;
+			} 
+		});
 		if (nextNodes.length > 0) {
 			closestNode = nextNodes.reduce((pre, crt) => dir * pre.location[pos] > dir * crt.location[pos] ? pre : crt);
 		}
@@ -123,13 +128,13 @@ document.onkeyup = (e) => {
   	${e.shiftKey ? 'shift+' : ''}
   	${e.key}
   `
-//   if (keyMap[stringKey] !== undefined) keyMap[stringKey]
+//   if (keyMap[stringKey] !== undefined) keyMap[stringKey]()
 
   if (e.key.startsWith("Arrow") && !isMod) { keyMap[e.key](); return;}
   if (e.key == "Del" && !isMod && isTb) { deleteNode(); return;}
 
 }
 
-document.querySelector("textarea").addEventListener("input", e => {
-	myDiagram.toolManager.textEditingTool.acceptText();
-})
+// document.querySelector("textarea").addEventListener("input", e => {
+// 	myDiagram.toolManager.textEditingTool.acceptText();
+// })

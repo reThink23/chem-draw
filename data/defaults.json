@@ -1,5 +1,6 @@
 {
 	"atom": "C",
 	"loc": "0 0",
-	"distance": 100
+	"distance": 100,
+	"atomColor": "white"
 }

@@ -1,0 +1,29 @@
+{
+	"nodes": [
+		{ "key": 1, "atom": "C", "max": 4, "loc": "0 0" },
+		{ "key": 2, "atom": "C", "max": 4, "loc": "100 0" },
+		{ "key": 3, "atom": "C", "max": 4, "loc": "200 0" },
+		{ "key": 4, "atom": "H", "max": 4, "loc": "-100 0" },
+		{ "key": 5, "atom": "H", "max": 1, "loc": "0 100" },
+		{ "key": 6, "atom": "H", "max": 1, "loc": "0 -100" },
+		{ "key": 7, "atom": "H", "max": 1, "loc": "100 100" },
+		{ "key": 8, "atom": "H", "max": 1, "loc": "100 -100" },
+		{ "key": 9, "atom": "H", "max": 1, "loc": "200 100" },
+		{ "key": 10, "atom": "H", "max": 1, "loc": "300 0" },
+		{ "key": 11, "atom": "H", "max": 1, "loc": "200 -100" }
+	],
+	"links": [
+		{ "from": 1, "to": 2 },
+		{ "from": 2, "to": 3 },
+		{ "from": 1, "to": 4 },
+		{ "from": 1, "to": 5 },
+		{ "from": 1, "to": 6 },
+		{ "from": 2, "to": 7 },
+		{ "from": 8, "to": 2 },
+		{ "from": 3, "to": 9 },
+		{ "from": 3, "to": 10 },
+		{ "from": 3, "to": 11 },
+		{ "from": 3, "to": 11 },
+		{ "from": 3, "to": 11 }
+	]
+}
