@@ -8,7 +8,7 @@ It focuses on:
 - intuitive
 - fast in creating structures
 
-## Short term TODO
+## Short Term TODO
 - [x] arrow key functionality
 - [ ] add/correct focusing
 - [ ] change Atom type
