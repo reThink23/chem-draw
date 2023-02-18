@@ -19,6 +19,44 @@ const addNode = (crtNode, nodeData) => {
 	return newNode;
 }
 
+const findGroup = (name, type = "group") => {
+	const atoms = name.split("");
+	myDiagram.findNodesByExample({atom: atoms[0]}).each(node => {
+		const conNodes = node.findNodesConnected();
+		conNodes.each()
+
+	})
+
+	const links = myDiagram.model.linkDataArray;
+	const hydroxyGroups = links.filter(link => {
+		const fromNode = myDiagram.findNodeForKey(link.from)
+		const toNode = myDiagram.findNodeForKey(link.to)
+		const fromAtom = fromNode.data.atom
+		const toAtom = toNode.data.atom
+		return (fromAtom == "O" && toAtom == "H" && fromNode.linksConnected.count == 2) || (fromAtom == "H" && toAtom == "O" && toNode.linksConnected.count == 2)
+	});
+	const aminoGroups = links.filter(link => {
+		const fromNode = myDiagram.findNodeForKey(link.from)
+		const toNode = myDiagram.findNodeForKey(link.to)
+		const fromAtom = fromNode.data.atom
+		const toAtom = toNode.data.atom
+		if (fromAtom == "N") Array.from(fromNode.findNodesConnected()).filter()
+		return (fromAtom == "N" && toAtom == "H" && fromNode.linksConnected.count == 3) || (fromAtom == "H" && toAtom == "N" && toNode.linksConnected.count == 3)
+	});
+	// name: functional groups: OH (Hydroxyl), COOH (Carboxyl), CHO (Aldehyd), CO (Carbonyl), NH2 (Amino), Ph (Phenyl)
+	// 		 bonds: 			ester, peptide, oxy, single, double, triple
+	// type: "group" | "bond" | "g" | "b"
+	switch (name) {
+		case "OH":
+		case "Hydroxy":
+
+			break;
+
+		default:
+			break;
+	}
+}
+
 const getNextNodes = (crtNode, pos, direction=1) => {
 	const dir = (direction >= 0 ? 1 : -1);
 	var nextNodes = [];

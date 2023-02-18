@@ -38,10 +38,10 @@ const validateAtom = (tb, olds, news) => {
 }
 
 const validateBonds = (fromnode, fromport, tonode, toport) => {
-			// total number of links connecting with all ports of a node is limited to 1:
-			const maxCount = atomProps[fromnode.data.atom].maxBonds;
-			return fromnode.linksConnected.count + tonode.linksConnected.count <= maxCount;
-		}
+	// total number of links connecting with all ports of a node is limited to 1:
+	const maxCount = atomProps[fromnode.data.atom].maxBonds;
+	return fromnode.linksConnected.count + tonode.linksConnected.count <= maxCount;
+}
 
 const errorHandler = (tool, olds, news) => {
 	var mgr = tool.diagram.toolManager;

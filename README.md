@@ -10,13 +10,17 @@ It focuses on:
 
 ## Short term TODO
 - [x] arrow key functionality
+- [x] change Atom type
+- [x] validation of input
 - [ ] add/correct focusing
-- [ ] change Atom type
-- [ ] change appearance of node based on atom type
 - [ ] basic editing
-- [ ] validation of input
-- [ ] how to generate (meaningful) unique ids/keys
+- [ ] side chain handling
+- [ ] change appearance of node based on atom type
 - [ ] custom shortcuts
+- [ ] group detection
+
+### Won't Do
+- [ ] how to generate (meaningful) unique ids/keys
 
 ## Long Term TODO
 - [ ] Basic Application running, Arrow keys in use, add, create, modify simple chemical structures
