@@ -19,11 +19,35 @@ const addNode = (crtNode, nodeData) => {
 	return newNode;
 }
 
+const groupNames = {
+	"OH": ["OH", "Hydroxy"], 
+	"COOH": ["COOH", "Carboxyl"], 
+	"CHO": ["CHO", "Aldehyd"], 
+	"NH2": ["NH2", "Amino"],
+	"CH3": ["CH3", "Methyl"],
+	"Ph": ["Ph", "Phenyl"]
+	// "CO": ["CO", "Carbonyl"], 
+};
+
 const findGroup = (name, type = "group") => {
-	const atoms = name.split("");
+	const atoms = getGroup(name);
+	const groups = [];
+	// const atoms = name.split("");
 	myDiagram.findNodesByExample({atom: atoms[0]}).each(node => {
+		const corAtoms = []
 		const conNodes = node.findNodesConnected();
-		conNodes.each()
+		conNodes.each(conNode => conNode.data.atom == atoms[1] ? corAtoms.push(conNode) : null);
+		switch (atoms) {
+			case "OH":
+				if (node.linksConnected.count != 2 && corAtoms.length != 1) break;
+				const links = node.findLinksBetween(corAtoms[0]);
+				if (links.length === 0) break;
+				groups.push([[node, corAtoms[0]], Array.from(links)]);
+				break;
+		
+			default:
+				break;
+		}
 
 	})
 
