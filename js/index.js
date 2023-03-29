@@ -21,10 +21,15 @@ const addNode = (crtNode, nodeData) => {
 
 const groupNames = {
 	"OH": ["OH", "Hydroxy"], 
+	// "-O(-H)": ["OH", "Hydroxy"], 
 	"COOH": ["COOH", "Carboxyl"], 
+	// "-C(=O)(-O-H)": ["COOH", "Carboxyl"], 
 	"CHO": ["CHO", "Aldehyd"], 
+	// "-C(-H)(=O)": ["CHO", "Aldehyd"], 
 	"NH2": ["NH2", "Amino"],
+	// "-N(-H)(-H)": ["NH2", "Amino"],
 	"CH3": ["CH3", "Methyl"],
+	// "-C(-H)(-H)(-H)": ["CH3", "Methyl"],
 	"Ph": ["Ph", "Phenyl"]
 	// "CO": ["CO", "Carbonyl"], 
 };
