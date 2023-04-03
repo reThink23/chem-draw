@@ -6,33 +6,48 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Settings</title>
 
+	
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
 	<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-
+	
 	<script src="https://kit.fontawesome.com/49cfc8cee4.js" crossorigin="anonymous"></script>
 	
-	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist/dist/cdn.min.js"></script>
-	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist/dist/cdn.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/@colinaut/alpinejs-plugin-simple-validate/dist/alpine.validate.min.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
 	
 	<link rel="stylesheet" href="style.css">
+	
+	<script src="./multilities/text.js"></script>
+	<script src="./multilities/css.js"></script>
 
 	<script src="./js/fetcher.js"></script>
 	<script src="./js/data.js"></script>
 </head>
 <body>
+	<div id="homeIcon" class="floating-icon" onclick="location.href='/'">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+			<!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+			<path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+		</svg>
+	</div>
 	<div id="settings" x-data="{
-		atom: $persist('C'), locX: $persist(0), locY: $persist(0),
-		distance: $persist(100), saveAlert: false
-	}">
+			atom: $persist('C'), locX: $persist(0), locY: $persist(0),
+			distance: $persist(100), atomColor: $persist('#FFFFFF'),
+			backgroundColor: $persist('#FFFFFF'),
+			saveAlert: false, getContrast
+		}">
 		<div class="snackbar" :class="{ 'show' : saveAlert}"> <i class="fas fa-save"></i> Setting saved</div>
 		
-		<h1 class="text-center">Settings</h1>
+		<h1 class="text-center mb-3">Settings</h1>
 		<h2 class="mb-3 ms-3">Change Defaults</h2>
 		<div class="input-group mb-3 row">
-			<label for="defAtom" class="col-sm-2 ms-3 col-form-label"><i class="fas fa-atom"></i> Atom</label>
+			<label for="defAtom" class="col-sm-2 ms-3 col-form-label"><span style="line-height: 2rem; width: 2rem" :style="`background-color: ${getContrast(atomColor)}`"><i class="fas fa-atom" :style="`color: ${atomColor};`"></i></span> Atom</label>
 			<div class="col-sm-1">
 				<input type="text" class="form-control text-center" id="defAtom" x-model="atom" @change="saveAlert = true; setTimeout(() => saveAlert = false, 3000)" x-validate="[...atoms, ...customAtoms].includes($el.value)">
+			</div>
+			<div class="col-sm-1">
+				<input type="color" class="form-control" id="defAtomColor" x-model="atomColor" @change="saveAlert = true; setTimeout(() => saveAlert = false, 3000)">
 			</div>
 		</div>
 		<div class="input-group mb-3 row">
