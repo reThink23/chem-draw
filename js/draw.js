@@ -32,6 +32,23 @@ const linksData = [
 	{ from: 3, to: 11 },
 ];
 
+const nodesDict = {};
+nodesData.forEach( node => {nodesDict[node.key] = node} )
+const linksDict = {};
+nodesData.forEach( node => {nodesDict[node.key] = node} )
+
+const createAdjacenceList = () => {
+	const nodes = nodesData.sort( (a,b) => a.key - b.key );
+	
+	adjacenceList = {};
+	// nodesData.forEach(node => adjacenceList[node.key]);
+	linksData.forEach(link => {
+		adjacenceList[link.from]['out'].push(link.to) 
+		adjacenceList[link.to]['in'].push(link.from) 
+	});
+} 
+
+
 const validateAtom = (tb, olds, news) => {
 	return [...atoms, ...customAtoms].includes(news);
 	// tb.findTopLevelPart().linksConnected.count >= getBindableElectrons(tb.findTopLevelPart().data.atom)
